@@ -1,7 +1,7 @@
 from flask import Flask, render_template
-import platform, os
+import socket, subprocess
 
-app = Flask(__name__)
+app=Flask(__name__, template_folder='template')
 mensaje=[]
 
 
@@ -11,14 +11,12 @@ def index():
 
 @app.route("/<parametro>")
 def mostrar(parametro):
-    if parametro=="so":
-        return render_template('index.html', mensaje=['Sistema Operativo', platform.system()])
-    elif parametro=="plataforma":
-        return render_template('index.html', mensaje=['Procesador', platform.processor()])
-    elif parametro=="arquitectura":
-        return render_template('index.html', mensaje=['Arquitectura', platform.architecture()])
-    elif parametro=="version":
-        return render_template('index.html', mensaje=['Versión de Python', platform.python_version()])
+    if parametro=="ip":
+        return render_template('index.html', mensaje=['IP Local', socket.gethostbyname(socket.gethostname()+'.local')])
+    elif parametro=="nombre":
+        return render_template('index.html', mensaje=['Nombre', socket.gethostname()])
+    elif parametro=="reinicio":
+        return render_template('index.html', mensaje=['Reinicio', subprocess.run("reboot")])
     else:
         return render_template('index.html',mensaje=['Error','Parámetro no válido, haz clic en el menú superior'])
 
